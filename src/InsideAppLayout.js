@@ -15,10 +15,7 @@ export class InsideAppLayout extends Component {
                 <div id="content">
                   <TopBar />
                   {/* Begin Page Content */}
-                  <div className="container-fluid">
-                    {/* Page Heading */}
-                    <h1 className="h3 mb-4 text-gray-800">Blank Page</h1>
-                  </div>
+                  {this.props.children}
                   {/* /.container-fluid */}
                 </div>
                 {/* End of Main Content */}
