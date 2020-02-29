@@ -1,4 +1,48 @@
 import React, { Component } from 'react';
+import SimpleSchema from 'simpl-schema';
+import bridge, { SimpleSchema2Bridge } from 'uniforms-bridge-simple-schema-2';
+import { AutoForm } from 'uniforms-bootstrap4';
+
+
+const signupSchema = new SimpleSchema({
+  firstName: String,
+  lastName: String,
+  gender: {
+    type: String,
+    allowedValues: ['male', 'female']
+  },
+  email: {
+    label: 'Email Address',
+    type: String,
+    regEx: SimpleSchema.RegEx.EmailWithTLD
+  },
+  password: {
+    type: String,
+    min: 6,
+    uniforms: {
+      type: 'password'
+    }
+  },
+  confirmPassword: {
+    type: String,
+    custom() {
+      if (this.field('password').value != this.value) {
+        return 'passwordMismatch';
+      }
+    }
+  }
+});
+
+signupSchema.messageBox.messages({
+  en: {
+    "passwordMismatch": "Passwords mismatch",
+  },
+});
+
+const formSignupSchema = new SimpleSchema2Bridge(signupSchema);
+
+
+
 
 export class Signup extends Component {
     render() {
@@ -14,37 +58,8 @@ export class Signup extends Component {
                   <div className="text-center">
                     <h1 className="h4 text-gray-900 mb-4">Create an Account!</h1>
                   </div>
-                  <form className="user">
-                    <div className="form-group row">
-                      <div className="col-sm-6 mb-3 mb-sm-0">
-                        <input type="text" className="form-control form-control-user" id="exampleFirstName" placeholder="First Name" />
-                      </div>
-                      <div className="col-sm-6">
-                        <input type="text" className="form-control form-control-user" id="exampleLastName" placeholder="Last Name" />
-                      </div>
-                    </div>
-                    <div className="form-group">
-                      <input type="email" className="form-control form-control-user" id="exampleInputEmail" placeholder="Email Address" />
-                    </div>
-                    <div className="form-group row">
-                      <div className="col-sm-6 mb-3 mb-sm-0">
-                        <input type="password" className="form-control form-control-user" id="exampleInputPassword" placeholder="Password" />
-                      </div>
-                      <div className="col-sm-6">
-                        <input type="password" className="form-control form-control-user" id="exampleRepeatPassword" placeholder="Repeat Password" />
-                      </div>
-                    </div>
-                    <a href="login.html" className="btn btn-primary btn-user btn-block">
-                      Register Account
-                    </a>
-                    <hr />
-                    <a href="index.html" className="btn btn-google btn-user btn-block">
-                      <i className="fab fa-google fa-fw" /> Register with Google
-                    </a>
-                    <a href="index.html" className="btn btn-facebook btn-user btn-block">
-                      <i className="fab fa-facebook-f fa-fw" /> Register with Facebook
-                    </a>
-                  </form>
+                  <AutoForm schema={formSignupSchema} onSubmit={console.log} />
+                  
                   <hr />
                   <div className="text-center">
                     <a className="small" href="forgot-password.html">Forgot Password?</a>
