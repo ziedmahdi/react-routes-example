@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import SimpleSchema from 'simpl-schema';
-import bridge, { SimpleSchema2Bridge } from 'uniforms-bridge-simple-schema-2';
+import { SimpleSchema2Bridge } from 'uniforms-bridge-simple-schema-2';
 import { AutoForm } from 'uniforms-bootstrap4';
+import Axios from 'axios';
 
 
 const signupSchema = new SimpleSchema({
@@ -45,6 +46,18 @@ const formSignupSchema = new SimpleSchema2Bridge(signupSchema);
 
 
 export class Signup extends Component {
+
+    handleSubmit(user) {
+      Axios.post(process.env.REACT_APP_API_URL + '/users.php', user).then(() => {
+        
+        console.log('hi')
+        alert('Success')
+      }).catch((exception) => {
+        alert('Failde: ' + exception.message);
+      })
+      console.log('hello')
+    }
+
     render() {
       return (
   
@@ -58,7 +71,7 @@ export class Signup extends Component {
                   <div className="text-center">
                     <h1 className="h4 text-gray-900 mb-4">Create an Account!</h1>
                   </div>
-                  <AutoForm schema={formSignupSchema} onSubmit={console.log} />
+                  <AutoForm schema={formSignupSchema} onSubmit={this.handleSubmit} />
                   
                   <hr />
                   <div className="text-center">
