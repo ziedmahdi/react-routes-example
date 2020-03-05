@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export const TopBar = function () {
 
@@ -166,10 +167,10 @@ export const TopBar = function () {
                   Activity Log
                 </a>
                 <div className="dropdown-divider" />
-                <a className="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                <Link to="/login" className="dropdown-item">
                   <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400" />
                   Logout
-                </a>
+                </Link>
               </div>
             </li>
           </ul>

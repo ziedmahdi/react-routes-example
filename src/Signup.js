@@ -3,6 +3,7 @@ import SimpleSchema from 'simpl-schema';
 import { SimpleSchema2Bridge } from 'uniforms-bridge-simple-schema-2';
 import { AutoForm } from 'uniforms-bootstrap4';
 import Axios from 'axios';
+import { Link } from 'react-router-dom';
 
 
 const signupSchema = new SimpleSchema({
@@ -26,6 +27,9 @@ const signupSchema = new SimpleSchema({
   },
   confirmPassword: {
     type: String,
+    uniforms: {
+      type: 'password'
+    },
     custom() {
       if (this.field('password').value != this.value) {
         return 'passwordMismatch';
@@ -44,18 +48,20 @@ const formSignupSchema = new SimpleSchema2Bridge(signupSchema);
 
 
 
-
 export class Signup extends Component {
+    constructor(props) {
+      super(props);
+      this.handleSubmit = this.handleSubmit.bind(this);
+    }
 
-    handleSubmit(user) {
-      Axios.post(process.env.REACT_APP_API_URL + '/users.php', user).then(() => {
-        
-        console.log('hi')
-        alert('Success')
-      }).catch((exception) => {
-        alert('Failde: ' + exception.message);
-      })
-      console.log('hello')
+    async handleSubmit(user) {
+      
+      try {
+        const result = await Axios.post(process.env.REACT_APP_API_URL + '/users', user);
+        window.location.replace('/')
+      } catch (error) {
+        console.log(error)
+      }
     }
 
     render() {
@@ -78,7 +84,7 @@ export class Signup extends Component {
                     <a className="small" href="forgot-password.html">Forgot Password?</a>
                   </div>
                   <div className="text-center">
-                    <a className="small" href="login.html">Already have an account? Login!</a>
+                    <Link className="small" to="/login">Already have an account? Login!</Link>
                   </div>
                 </div>
               </div>
