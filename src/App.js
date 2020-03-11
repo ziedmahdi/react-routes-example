@@ -6,16 +6,16 @@ import { OutsideAppLayout } from './OutsideAppLayout';
 import { Signup } from './Signup';
 import { AppRoute } from './AppRoute';
 import { Login } from './Login';
+import { Dashboard } from './Dashboard';
+import { Users } from './Users';
 
-function Dashboard() {
-  return <h1>Dashboard</h1>
-}
 
 function App() {
   
   return (
     <BrowserRouter>
       <Switch>
+        <AppRoute path="/users" component={Users} layout={InsideAppLayout} />
         <AppRoute path="/login" component={Login} layout={OutsideAppLayout} />
         <AppRoute path="/signup" component={Signup} layout={OutsideAppLayout} />
         <AppRoute path="/" component={Dashboard} layout={InsideAppLayout} />

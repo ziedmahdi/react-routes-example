@@ -4,6 +4,7 @@ import { SimpleSchema2Bridge } from 'uniforms-bridge-simple-schema-2';
 import { AutoForm } from 'uniforms-bootstrap4';
 import Axios from 'axios';
 import { Link } from 'react-router-dom';
+import qs from 'qs';
 
 
 const signupSchema = new SimpleSchema({
@@ -51,17 +52,16 @@ const formSignupSchema = new SimpleSchema2Bridge(signupSchema);
 export class Signup extends Component {
     constructor(props) {
       super(props);
-      this.handleSubmit = this.handleSubmit.bind(this);
+      this.addNewUser = this.addNewUser.bind(this);
     }
 
-    async handleSubmit(user) {
-      
-      try {
-        const result = await Axios.post(process.env.REACT_APP_API_URL + '/users', user);
-        window.location.replace('/')
-      } catch (error) {
-        console.log(error)
-      }
+    addNewUser(user) {
+      Axios.post(process.env.REACT_APP_API_URL + '/users', qs.stringify(user)).then(() => {
+        this.props.history.push('/login');
+      }).catch(({response}) => {
+        const error = response.data && response.data.error ? response.data.error : 'Something went wrong'
+        alert(error);
+      })
     }
 
     render() {
@@ -77,7 +77,7 @@ export class Signup extends Component {
                   <div className="text-center">
                     <h1 className="h4 text-gray-900 mb-4">Create an Account!</h1>
                   </div>
-                  <AutoForm schema={formSignupSchema} onSubmit={this.handleSubmit} />
+                  <AutoForm schema={formSignupSchema} onSubmit={this.addNewUser} />
                   
                   <hr />
                   <div className="text-center">
